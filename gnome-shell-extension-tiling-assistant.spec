@@ -13,7 +13,7 @@ Release:        %autorelease
 Summary:        An extension which adds a Windows-like snap assist to GNOME
 BuildArch:      noarch
 
-License:        GPL-2.0-only
+License:        GPL-2.0-or-later
 URL:            %{forgeurl}
 Source0:        %{forgesource}
 
@@ -25,10 +25,8 @@ Requires:       gnome-shell
 %description
 %{summary}.
 
-
 %prep
 %autosetup -n %{pkgname}-%{version}
-
 
 %build
 glib-compile-schemas tiling-assistant@leleat-on-github/schemas
