@@ -43,6 +43,9 @@ mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas
 
 install -Dp -m 0644 %{uuid}/{extension.js,metadata.json,stylesheet.css,prefs.js} \
     %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
+
+cp -rp %{uuid}/src %{uuid}/media \
+    %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
 	
 install -Dp -m 0644 %{uuid}/schemas/org.gnome.shell.extensions.%{lowername}.gschema.xml \
     %{buildroot}%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.%{lowername}.gschema.xml
