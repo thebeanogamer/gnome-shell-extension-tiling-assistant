@@ -1,0 +1,63 @@
+%global pkgname Tiling-Assistant
+%global lowername %{lower:%{pkgname}} 
+%global uuid %{lowername}@leleat-on-github
+
+%global forgeurl https://github.com/ubuntu/%{pkgname}
+
+Version:        54
+
+%forgemeta
+
+Name:           gnome-shell-extension-%{lowername}
+Release:        %autorelease
+Summary:        An extension which adds a Windows-like snap assist to GNOME
+BuildArch:      noarch
+
+License:        GPL-2.0-only
+URL:            %{forgeurl}
+Source0:        %{forgesource}
+
+BuildRequires:  gettext
+BuildRequires:  glib2
+
+Requires:       gnome-shell
+
+%description
+%{summary}.
+
+
+%prep
+%autosetup -n %{pkgname}-%{version}
+
+
+%build
+glib-compile-schemas tiling-assistant@leleat-on-github/schemas
+
+for FILE in translations/*.po; do
+    LANG=$(basename "$FILE" .po)
+    mkdir -p "locale/$LANG/LC_MESSAGES"
+    msgfmt -c "$FILE" -o "locale/$LANG/LC_MESSAGES/tiling-assistant@leleat-on-github.mo"
+done
+
+%install
+mkdir -p %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}
+mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas	
+
+install -Dp -m 0644 %{uuid}/{extension.js,metadata.json,stylesheet.css,prefs.js} \
+    %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
+	
+install -Dp -m 0644 %{uuid}/schemas/org.gnome.shell.extensions.%{lowername}.gschema.xml \
+    %{buildroot}%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.%{lowername}.gschema.xml
+
+mv locale %{buildroot}%{_datadir}/locale
+%find_lang %{uuid}
+
+%files -f %{uuid}.lang 
+%license LICENSE
+%doc README.md
+%{_datadir}/gnome-shell/extensions/%{uuid}/
+%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.%{lowername}.gschema.xml
+
+%changelog
+%autochangelog
+
